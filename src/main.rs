@@ -3,7 +3,7 @@ use std::process::exit;
 use serde::{Deserialize, Serialize};
 
 fn main() {
-    println!("Look up the price of a cryptocurrency: ");
+    println!("What price do you want to look for a cryptocurrency? ");
     let mut coin = String::new();
 
     let _ = std::io::stdin()
