@@ -1,3 +1,5 @@
+use std::process::exit;
+
 use serde::{Deserialize, Serialize};
 
 fn main() {
@@ -8,11 +10,22 @@ fn main() {
         .read_line(&mut coin)
         .expect("An error occurred while reading stdin");
 
-    let res = get_price(&coin);
+    match coin.trim_end() {
+        "exit" => {
+            println!("Bye!!");
+            exit(3)
+        }
+        _ => {
+            let res = get_price(&coin);
 
-    match res {
-        Ok(price) => println!("The price is: {price}"),
-        Err(error) => println!("Error fetching the coin {error}"),
+            match res {
+                Ok(price) => {
+                    println!("The price is: {price}");
+                    main()
+                }
+                Err(error) => println!("Error fetching the coin {error}"),
+            }
+        }
     }
 }
 
