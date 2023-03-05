@@ -1,4 +1,4 @@
-use serde_json::Value;
+use serde::{Deserialize, Serialize};
 
 fn main() {
     println!("Look up the price of a cryptocurrency: ");
@@ -21,6 +21,25 @@ fn get_price(coin: &str) -> Result<String, ureq::Error> {
         .call()?
         .into_string()?;
 
-    let parsed: Value = serde_json::from_str(&body).unwrap();
-    Ok(parsed["market_data"]["current_price"]["usd"].to_string())
+    let coin_data: Coin = serde_json::from_str(&body).unwrap();
+    Ok(coin_data.market_data.current_price.usd.to_string())
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Coin {
+    id: String,
+    name: String,
+    symbol: String,
+    market_data: MarketData,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct MarketData {
+    current_price: Prices,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Prices {
+    usd: f32,
+    eur: f32,
 }
